@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.contollers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -15,31 +17,31 @@ public class UserRestController {
     private UserService userService;
 
     @GetMapping()
-    public List<User> allUsers(@ModelAttribute("user") User user) {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> allUsers(@ModelAttribute("user") User user) {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public User getUser(@PathVariable long id, @ModelAttribute("user") User user) {
-        return userService.getUserById(id);
+    public ResponseEntity<User> getUser(@PathVariable long id, @ModelAttribute("user") User user) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
 
     @PostMapping
-    public User addUser(@RequestBody User user) {
+    public ResponseEntity<User> addUser(@RequestBody User user) {
         userService.addUser(user);
-        return user;
+        return new ResponseEntity<> (user, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public User changeUser(@RequestBody User user) {
+    public ResponseEntity<User> changeUser(@RequestBody User user) {
         userService.updateUser(user.getId(), user);
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
         userService.deleteUser(id);
-        return "Ok";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
